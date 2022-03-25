@@ -1,30 +1,41 @@
 <template>
   <div class="home">
     <h1>Home</h1>
-    <PostList :posts="posts" v-if="showPosts" />
-    <button @click="showPosts = !showPosts">Toggle Posts</button>
-    <button @click="posts.pop()">Delete post</button>
+    <div v-if="error">{{ error }}</div>
+    <div v-if="posts.length">
+      <PostList :posts="posts" />
+    </div>
+    <div v-else>Loading...</div>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import PostList from "../components/PostList.vue";
 
 export default {
   name: "HomeView",
   components: { PostList },
   setup() {
-    const showPosts = ref(true);
-    const posts = ref([
-      { title: "welcome to the blog", body: "Lorem Ipsum", id: 1 },
-      {
-        title: "A new post in this wonderful blog",
-        body: "Lorem Ipsdum",
-        id: 2,
-      },
-    ]);
-    return { posts, showPosts };
+    const posts = ref([]);
+    const error = ref(null);
+
+    const load = async () => {
+      try {
+        let data = await fetch("http://localhost:3000/posts");
+
+        if (!data.ok) {
+          throw Error("No posts have been found");
+        }
+        posts.value = await data.json();
+      } catch (err) {
+        error.value = err.message;
+        console.log(error.value);
+      }
+    };
+
+    onMounted(() => load());
+    return { posts, error };
   },
 };
 </script>
