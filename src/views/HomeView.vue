@@ -5,36 +5,24 @@
     <div v-if="posts.length">
       <PostList :posts="posts" />
     </div>
-    <div v-else>Loading...</div>
+    <SpinnerLoader v-else></SpinnerLoader>
   </div>
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
 import PostList from "../components/PostList.vue";
+import getPosts from "../composables/getPosts";
+import SpinnerLoader from '../components/SpinnerLoader.vue'
 
 export default {
   name: "HomeView",
-  components: { PostList },
+  components: { PostList, SpinnerLoader },
   setup() {
-    const posts = ref([]);
-    const error = ref(null);
+    const { load, error, posts } = getPosts();
+    
+    //Fetch posts
+    load();
 
-    const load = async () => {
-      try {
-        let data = await fetch("http://localhost:3000/posts");
-
-        if (!data.ok) {
-          throw Error("No posts have been found");
-        }
-        posts.value = await data.json();
-      } catch (err) {
-        error.value = err.message;
-        console.log(error.value);
-      }
-    };
-
-    onMounted(() => load());
     return { posts, error };
   },
 };

@@ -4,12 +4,15 @@
     <h3>{{ post.title }}</h3>
     <p class="pre">{{ post.body }}</p>
   </div>
+  <SpinnerLoader v-else />
 </template>
 
 <script>
 import getPost from "../composables/getPost";
+import SpinnerLoader from "../components/SpinnerLoader.vue";
 
 export default {
+  components: { SpinnerLoader },
   props: ["id"],
   setup(props) {
     const { error, post, load } = getPost();
