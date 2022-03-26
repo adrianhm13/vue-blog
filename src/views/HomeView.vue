@@ -12,14 +12,14 @@
 <script>
 import PostList from "../components/PostList.vue";
 import getPosts from "../composables/getPosts";
-import SpinnerLoader from '../components/SpinnerLoader.vue'
+import SpinnerLoader from "../components/SpinnerLoader.vue";
 
 export default {
   name: "HomeView",
   components: { PostList, SpinnerLoader },
   setup() {
     const { load, error, posts } = getPosts();
-    
+
     //Fetch posts
     load();
 
@@ -27,3 +27,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+.home {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px;
+}
+</style>
