@@ -8,16 +8,17 @@
 </template>
 
 <script>
+import { useRoute } from "vue-router";
 import getPost from "../composables/getPost";
 import SpinnerLoader from "../components/SpinnerLoader.vue";
 
 export default {
   components: { SpinnerLoader },
-  props: ["id"],
-  setup(props) {
+  setup() {
     const { error, post, load } = getPost();
+    const route = useRoute();
 
-    load(props.id);
+    load(route.params.id);
 
     return { error, post };
   },
