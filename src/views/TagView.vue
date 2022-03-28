@@ -28,10 +28,10 @@ export default {
     load();
 
     const route = useRoute();
-    const { tag } = route.params;
 
     const filteredPosts = computed(() => {
-      return posts.value.filter((post) => post.tags.includes(tag));
+      console.log("FIRED");
+      return posts.value.filter((post) => post.tags.includes(route.params.tag));
     });
 
     return { error, filteredPosts, posts };
