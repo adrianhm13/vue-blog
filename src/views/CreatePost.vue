@@ -18,6 +18,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import createPost from "../composables/createPost";
+import { timestamp } from "@/firebase/config";
 
 export default {
   setup() {
@@ -26,7 +27,7 @@ export default {
     const tag = ref("");
     const tags = ref([]);
 
-    const { error, create, response } = createPost();
+    const { error, create } = createPost();
     const router = useRouter();
 
     const handleKeydown = () => {
@@ -38,16 +39,14 @@ export default {
     };
 
     const handleSubmit = async () => {
-      console.log(title, content, tags);
       const newPost = {
         title: title.value,
         body: content.value,
         tags: tags.value,
+        createdAt: timestamp(),
       };
       await create(newPost);
-      if (response.value.ok) {
-        router.push("/");
-      }
+      router.push("/");
     };
 
     return { title, content, tag, tags, handleKeydown, handleSubmit, error };
@@ -55,7 +54,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 form {
   max-width: 480px;
   margin: 0 auto;

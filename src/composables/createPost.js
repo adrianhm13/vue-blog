@@ -1,15 +1,12 @@
+import { projectFirestore } from "@/firebase/config";
 import { ref } from "vue";
 
 const createPost = () => {
   const error = ref(null);
-  const response = ref(null);
+  let response;
   const create = async (post) => {
     try {
-        response.value = await fetch("http://localhost:3000/posts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(post),
-      });
+      response = await projectFirestore.collection("posts").add(post);
     } catch (error) {
       console.log(error);
       error.value = error.message;
